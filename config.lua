@@ -33,6 +33,8 @@ lvim.keys.normal_mode['td'] = ':bd<CR>'
 
 
 lvim.builtin.lualine.style = "default"
+vim.opt.relativenumber = true
+lvim.transparent_window = true
 -- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 -- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
