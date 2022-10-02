@@ -11,12 +11,13 @@ an executable
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "gruvbox"
+lvim.colorscheme = "onedarker"
+-- to disable icons and use a minimalist setup, uncomment the following
+-- lvim.use_icons = false
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
-lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
 lvim.keys.normal_mode['oi'] = "O<Esc>j"
@@ -29,10 +30,15 @@ lvim.keys.normal_mode['te'] = ':tabe<CR>'
 lvim.keys.normal_mode['tr'] = ":bp<CR>"
 lvim.keys.normal_mode['ty'] = ":bn<CR>"
 lvim.keys.normal_mode['td'] = ':bd<CR>'
+
+
+lvim.builtin.lualine.style = "default"
+-- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+-- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
--- lvim.keys.normal_mode["<C-Up>"] = false
--- edit a default keymapping
--- lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
+-- vim.keymap.del("n", "<C-Up>")
+-- override a default keymapping
+-- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -58,10 +64,10 @@ lvim.keys.normal_mode['td'] = ':bd<CR>'
 --   name = "+Trouble",
 --   r = { "<cmd>Trouble lsp_references<cr>", "References" },
 --   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---   d = { "<cmd>Trouble lsp_document_diagnostics<cr>", "Diagnostics" },
+--   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
 --   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
 --   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
+--   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 -- }
 
 -- TODO: User Config for predefined plugins
@@ -71,7 +77,7 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -94,16 +100,34 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- generic LSP settings
 
+-- -- make sure server will always be installed even if the server is in skipped_servers list
+-- lvim.lsp.installer.setup.ensure_installed = {
+--     "sumeko_lua",
+--     "jsonls",
+-- }
+-- -- change UI setting of `LspInstallInfo`
+-- -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>
+-- lvim.lsp.installer.setup.ui.check_outdated_servers_on_open = false
+-- lvim.lsp.installer.setup.ui.border = "rounded"
+-- lvim.lsp.installer.setup.ui.keymaps = {
+--     uninstall_server = "d",
+--     toggle_server_expand = "o",
+-- }
+
 -- ---@usage disable automatic installation of servers
--- lvim.lsp.automatic_servers_installation = false
+-- lvim.lsp.installer.setup.automatic_installation = false
 
--- ---@usage Select which servers should be configured manually. Requires `:LvimCacheReset` to take effect.
--- See the full default list `:lua print(vim.inspect(lvim.lsp.override))`
--- vim.list_extend(lvim.lsp.override, { "pyright" })
-
--- ---@usage setup a server -- see: https://www.lunarvim.org/languages/#overriding-the-default-configuration
+-- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
+-- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
+-- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
--- require("lvim.lsp.manager").setup("pylsp", opts)
+-- require("lvim.lsp.manager").setup("pyright", opts)
+
+-- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
+-- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
+-- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
+--   return server ~= "emmet_ls"
+-- end, lvim.lsp.automatic_configuration.skipped_servers)
 
 -- -- you can set a custom on_attach function that will be used for all the language servers
 -- -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
@@ -151,15 +175,78 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- Additional Plugins
 lvim.plugins = {
-    {"folke/tokyonight.nvim"},
-    {"morhetz/gruvbox"},
-    {
-      "folke/trouble.nvim",
-      cmd = "TroubleToggle",
-    },
+  { "folke/tokyonight.nvim" },
+  {
+    "folke/trouble.nvim",
+    cmd = "TroubleToggle",
+  },
+  { 'Mofiqul/dracula.nvim' },
+  { 'olimorris/onedarkpro.nvim' },
+  { "ellisonleao/gruvbox.nvim" },
+  { 'sainnhe/sonokai' },
+  { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' },
+  { 'hood/popui.nvim' },
+  { 'RishabhRD/popfix' },
+  { "stevearc/dressing.nvim" },
+  {
+    'kosayoda/nvim-lightbulb',
+    requires = 'antoinemadec/FixCursorHold.nvim',
+  },
+  { 'rmagatti/goto-preview'
+  },
+  { 'norcalli/nvim-colorizer.lua' },
+  { 'gpanders/editorconfig.nvim' },
+  { 'nacro90/numb.nvim' },
+  { 'windwp/nvim-ts-autotag' },
+  {
+    "folke/todo-comments.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("todo-comments").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
 }
 
+vim.ui.select = require "popui.ui-overrider"
+vim.ui.input = require "popui.input-overrider"
+-- Showing defaults
+require('nvim-lightbulb').setup({
+  status_text = {
+    enabled = true,
+    text = "💡",
+    text_unavailable = ""
+  },
+  autocmd = {
+    enabled = true,
+  }
+})
+
+require('goto-preview').setup {
+  default_mappings = true;
+}
+
+require('numb').setup()
+require('nvim-ts-autotag').setup()
+
+require("todo-comments").setup {
+  -- your configuration comes here
+  -- or leave it empty to use the default settings
+  -- refer to the configuration section below
+}
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
--- }
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = { "*.json", "*.jsonc" },
+--   -- enable wrap mode for json files only
+--   command = "setlocal wrap",
+-- })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "zsh",
+--   callback = function()
+--     -- let treesitter use bash highlight for zsh files as well
+--     require("nvim-treesitter.highlight").attach(0, "bash")
+--   end,
+-- })
