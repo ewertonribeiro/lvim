@@ -1,6 +1,5 @@
 --[[
 lvim is the global options object
-
 Linters should be
 filled in as strings with either
 a global executable or a path to
@@ -11,7 +10,7 @@ an executable
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "onedarker"
+lvim.colorscheme = "tokyonight"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -32,9 +31,8 @@ lvim.keys.normal_mode['ty'] = ":bn<CR>"
 lvim.keys.normal_mode['td'] = ':bd<CR>'
 
 
-lvim.builtin.lualine.style = "default"
 vim.opt.relativenumber = true
-lvim.transparent_window = true
+-- lvim.transparent_window = true
 -- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 -- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
@@ -177,7 +175,6 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- Additional Plugins
 lvim.plugins = {
-  { "folke/tokyonight.nvim" },
   {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
@@ -210,11 +207,21 @@ lvim.plugins = {
         -- refer to the configuration section below
       }
     end
+  },
+  {
+    'pwntester/octo.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'kyazdani42/nvim-web-devicons',
+    }
   }
 }
 
 vim.ui.select = require "popui.ui-overrider"
 vim.ui.input = require "popui.input-overrider"
+
+require "octo".setup()
 -- Showing defaults
 require('nvim-lightbulb').setup({
   status_text = {
